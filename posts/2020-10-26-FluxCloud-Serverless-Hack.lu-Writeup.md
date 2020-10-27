@@ -26,7 +26,7 @@
 
   E.g. [https://serverless.cloud.flu.xxx/demo/yaIqnjw2fSjArUaM_4jl1**/flAg**](https://serverless.cloud.flu.xxx/demo/yaIqnjw2fSjArUaM_4jl1/flAg)
 
-  ⚠ After one hour your "deployment" would stop working. In order to create new repeat first step.
+  ⚠ After one hour your "deployment" it will stop working. In order to create a new one, repeat the first step.
 
 ### Flag
 
