@@ -12,7 +12,7 @@
 
   We deployed our serverless instance. Now we need to find out where the flag is hidden. We can do this by looking into source files.
 
-  When you search for the word "flag" (e.g. with Search in VSCode) you can notice, that it only appears in waf.js and app.js files. Let's take a closer look.
+  When you search for the word "flag" (e.g. with Search in VSCode) you can notice, that it only appears in files waf.js and app.js. Let's take a closer look.
 
   In app.js, there is a variable called "FLAG", with an environment variable assigned to it. That is the place where the flag is.
 
