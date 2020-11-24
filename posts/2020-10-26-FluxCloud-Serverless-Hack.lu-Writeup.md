@@ -12,7 +12,7 @@
 
   We deployed our serverless instance. Now we need to find out where the flag is hidden. We can do this by looking into source files.
 
-  When you search for the word "flag" (e.g. with Search in VSCode) you can notice, that it only appears in waf.js and app.js files. Let's take a closer look.
+  When you search for the word "flag" (e.g. with Search in VSCode) you can notice, that it only appears in files waf.js and app.js. Let's take a closer look.
 
   In app.js, there is a variable called "FLAG", with an environment variable assigned to it. That is the place where the flag is.
 
@@ -26,7 +26,7 @@
 
   E.g. [https://serverless.cloud.flu.xxx/demo/yaIqnjw2fSjArUaM_4jl1**/flAg**](https://serverless.cloud.flu.xxx/demo/yaIqnjw2fSjArUaM_4jl1/flAg)
 
-  ⚠ After one hour your "deployment" would stop working. In order to create new repeat first step.
+  ⚠ After one hour your "deployment" it will stop working. In order to create a new one, repeat the first step.
 
 ### Flag
 
