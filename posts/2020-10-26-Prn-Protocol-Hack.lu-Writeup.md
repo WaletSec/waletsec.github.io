@@ -104,4 +104,4 @@ if __name__ == "__main__":
 
 #### License
 
-**CC BY** WaletSec + everl0stz
+**CC BY 4.0** WaletSec + everl0stz

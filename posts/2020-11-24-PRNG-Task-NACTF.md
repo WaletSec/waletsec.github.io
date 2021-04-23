@@ -125,4 +125,4 @@ nactf{ch000nky_turn1ps_1674973}
 
 #### License
 
-**CC BY** WaletSec + everl0stz
+**CC BY 4.0** WaletSec + everl0stz

@@ -40,4 +40,4 @@
 
 #### License
 
-**CC BY** WaletSec + mble
+**CC BY 4.0** WaletSec + mble

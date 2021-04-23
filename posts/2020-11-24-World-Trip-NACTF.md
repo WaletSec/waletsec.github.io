@@ -37,4 +37,4 @@ print(flag)
 
 #### License
 
-**CC BY** WaletSec + everl0stz
+**CC BY 4.0** WaletSec + everl0stz
