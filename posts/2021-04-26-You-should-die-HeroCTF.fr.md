@@ -33,7 +33,7 @@ if (!(isset($_SESSION["logged"]) && $_SESSION["logged"] === true)) {
 
 echo "Flag : " . getenv("FLAG_MARK3TING");
 ```
-Here we can see that flag can be accessed under the `/admin.php`. Code checks if we are logged in an if we are not it **redirects** us to /index.php. Redirect is key word here, because we can fetch this address with `curl`, which ignores `Location` header.
+Here we can see that flag can be accessed under the `/admin.php`. Code checks if we are logged in an if we are not it **redirects** us to /index.php. Redirect is a key word here, because we can fetch this address with `curl`, which ignores `Location` header.
 
 ```
 $ curl http://chall1.heroctf.fr:9000/admin.php
