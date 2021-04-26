@@ -8,7 +8,7 @@
 ### Solution
 
 We go to the address given to us - [http://chall1.heroctf.fr:9000/](http://chall1.heroctf.fr:9000/).
-Here, if we open DevTools, we can find interesting comment inside the `body` element.
+Here, if we open DevTools, we can find an interesting comment inside the `body` element.
 ```html
 <body id="page-top">
   <!--
@@ -19,7 +19,7 @@ Here, if we open DevTools, we can find interesting comment inside the `body` ele
       Security Team
   -->
 ```
-We have got the information that `admin.php.bak` is not removed, so we go there, and look how admin.php code looks like - [http://chall1.heroctf.fr:9000/admin.php.bak](http://chall1.heroctf.fr:9000/admin.php.bak)
+We have got the information that `admin.php.bak` is not removed, so we go there, and look at how an admin.php code looks like - [http://chall1.heroctf.fr:9000/admin.php.bak](http://chall1.heroctf.fr:9000/admin.php.bak)
 ```php
 <?php
 
