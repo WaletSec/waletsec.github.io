@@ -34,6 +34,7 @@ jobs:
         key: ${{ runner.os }}-hakyll-_cache
     - name: Install dependencies
       run: |
+        rm -r /home/runner/.cabal/bin/site
         cabal update
         cabal install --only-dependencies
     - name: Build generator
