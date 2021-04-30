@@ -33,6 +33,10 @@ footer {
   color: #ddd;
 }
 
+img {
+  width: 100%;
+}
+
 strong {
     background: linear-gradient(to right, blue, purple);
     -webkit-background-clip: text;
