@@ -8,7 +8,7 @@
 
  - Unzip `archive.zip` (using 7Zip for example)
  - Open it inside VSCode
- - Third, the most nested file contain our flag
+ - Third, the most nested file contains our flag
  ![Russian Doll - HeroCTF.fr; archive folder opened inside VSCode](../images/Russian-Doll-HeroCTF.fr.jpg)
 
 ### Flag
