@@ -33,6 +33,12 @@ footer {
   color: #ddd;
 }
 
+strong {
+    background: linear-gradient(to right, blue, purple);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: rgba(255,255,255,.66);
+}
+
 pre {
     font-family: Jetbrains Mono,monospace;
     background: #0a0e14;
