@@ -39,11 +39,15 @@ strong {
     -webkit-text-fill-color: rgba(255,255,255,.66);
 }
 
+pre > code {
+  font-family: Jetbrains Mono;
+}
+
 pre {
-    font-family: Jetbrains Mono,monospace;
     background: #0a0e14;
     padding: 18px;
     overflow: auto;
+    border: #674099 solid 5px;
 }
 
 p, a {
