@@ -1,4 +1,4 @@
-# Starbucks | RE
+# Starbucks | RE - UMDCTF 2021
 
 ### Solution
 
@@ -56,7 +56,7 @@ Because I didn't have java compiler, again I found this [online](https://www.onl
 
 ### Flag
 
-UMDCTF-{pyth0n_1s_b3tt3r}
+UMDCTF-{**pyth0n_1s_b3tt3r**}
 
 #### Credits
 
