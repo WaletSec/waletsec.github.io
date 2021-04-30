@@ -1,8 +1,8 @@
 .sourceCode .hll { background-color: #ffc; }
-.sourceCode .c { color: #999; } /* Comment */
-.sourceCode .err { color: #a00; background-color: #faa } /* Error */
-.sourceCode .k { color: #069; } /* Keyword */
-.sourceCode .o { color: #555 } /* Operator */
+.sourceCode .c { color: #5c6773; font-style: italic; } /* Comment */
+.sourceCode .err { color: #f33;} /* Error */
+.sourceCode .k { color: #ffa759; } /* Keyword */
+.sourceCode .o { color: #f29e74; } /* Operator */
 .sourceCode .cm { color: #09f; font-style: italic } /* Comment.Multiline */
 .sourceCode .cp { color: #099 } /* Comment.Preproc */
 .sourceCode .c1 { color: #999; } /* Comment.Single */
@@ -63,3 +63,7 @@
 .css .o,
 .css .o + .nt,
 .css .nt + .nt { color: #999; }
+
+.sourceCode .kw {color: #00BCEB;}
+.sourceCode .ot {color: #B7CE49;}
+.sourceCode .st {color: #FF9300;}
