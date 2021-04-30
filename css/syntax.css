@@ -64,12 +64,11 @@
 .css .o + .nt,
 .css .nt + .nt { color: #999; }
 
-.sourceCode {
+pre.sourceCode {
     font-family: Jetbrains Mono,monospace;
     background: #0a0e14;
     padding: 18px;
     overflow: overlay;
-    color: #b3b1ad;
 }
 
 .sourceCode .kw {color: #00BCEB;}
