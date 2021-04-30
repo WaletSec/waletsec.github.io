@@ -111,7 +111,7 @@ finalizeHtml ctx =
 
 datedCtx :: Context String
 datedCtx =
-  dateField "date" "%A %B %-e, %Y" <>
+  dateField "date" "%B %-e, %Y" <>
   defaultContext
 
 systemLicenseString :: String -> String -> String
