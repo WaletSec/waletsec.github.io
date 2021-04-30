@@ -35,10 +35,16 @@ footer {
 
 h1 {
   font-size: 2.4rem;
+  color: #d1c5e0;
 }
 
 h2 {
   font-size: 2rem;
+  color: #e0d8ea;
+}
+
+h3 {
+    color:#efebf4;
 }
 
 article .header {
