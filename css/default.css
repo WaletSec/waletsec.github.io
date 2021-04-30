@@ -33,6 +33,17 @@ footer {
   color: #ddd;
 }
 
+pre {
+    font-family: Jetbrains Mono,monospace;
+    background: #0a0e14;
+    padding: 18px;
+    overflow: overlay;
+}
+
+p, a {
+    word-break: break-word;
+}
+
 h1 {
   font-size: 2.4rem;
   color: #d1c5e0;
