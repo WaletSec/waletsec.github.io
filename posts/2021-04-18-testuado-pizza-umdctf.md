@@ -1,4 +1,4 @@
-# Testudo's Pizza | Steganography
+# Testudo's Pizza | Steganography - UMDCTF 2021
 
 ### Solution
 
@@ -12,7 +12,7 @@ This command gave me a lot of binary garbage but in the end of file was flag in 
 
 ### Flag
 
-UMDCTF-{W3_ar3_th3_b3st_P1ZZ3r1a}
+UMDCTF-{**W3_ar3_th3_b3st_P1ZZ3r1a**}
 
 #### Credits
 
