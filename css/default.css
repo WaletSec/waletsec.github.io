@@ -43,7 +43,7 @@ pre {
     font-family: Jetbrains Mono,monospace;
     background: #0a0e14;
     padding: 18px;
-    overflow: overlay;
+    overflow: auto;
 }
 
 p, a {
