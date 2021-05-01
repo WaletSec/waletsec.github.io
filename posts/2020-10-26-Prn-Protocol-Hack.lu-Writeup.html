@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>WaletSec - 2020-10-26-Prn-Protocol-Hack.lu-Writeup</title>
+        <link rel="stylesheet" href="../css/default.css" />
+        <link rel="stylesheet" href="../css/syntax.css" />
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../">WaletSec</a>
+            </div>
+            <nav>
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>2020-10-26-Prn-Protocol-Hack.lu-Writeup</h1>
+            <article>
+    <section class="header">
+        Posted on October 26, 2020
+        
+    </section>
+    <section>
+        <h1 id="prn-protocol-solution">P*rn protocol solution</h1>
+<h3 id="you-will-need">You will need</h3>
+<ul>
+<li>Python3</li>
+<li>Challenge files</li>
+</ul>
+<p>We get server address and protocol specification. The specs says that our messages must be “prefixed” with message ID and session ID. Server allows 4 message exchanges, that should be enough for us to get the flag.</p>
+<p>Here is the script I used to get the flag (with comments)</p>
+<p>⚠ Warning: the code is really bad and full of ugly hacks</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="im">import</span> socket</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">def</span> typetodescr(t):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="cf">if</span> t <span class="op">==</span> <span class="bn">0x01</span>:    <span class="cf">return</span> <span class="st">&quot;message id&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="cf">elif</span> t <span class="op">==</span> <span class="bn">0x02</span>:    <span class="cf">return</span> <span class="st">&quot;identifier&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="cf">elif</span> t <span class="op">==</span> <span class="bn">0x03</span>: <span class="cf">return</span> <span class="st">&quot;member id&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    <span class="cf">elif</span> t <span class="op">==</span> <span class="bn">0x04</span>: <span class="cf">return</span> <span class="st">&quot;login&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="cf">elif</span> t <span class="op">==</span> <span class="bn">0x05</span>: <span class="cf">return</span> <span class="st">&quot;flag&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    <span class="cf">elif</span> t <span class="op">==</span> <span class="bn">0xff</span>: <span class="cf">return</span> <span class="st">&quot;error&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="cf">else</span>:    <span class="cf">return</span> <span class="st">&quot;unknown&quot;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="kw">def</span> deserialize(d):</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    psz <span class="op">=</span> d.pop(<span class="dv">0</span>)        <span class="co"># the first byte is size of message</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>    ptype <span class="op">=</span> d.pop(<span class="dv">0</span>)    <span class="co"># second byte - message type</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>    pcontent <span class="op">=</span> []            <span class="co"># next psz - 1 - actual content</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, psz <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>        pcontent.append(d.pop(<span class="dv">0</span>))</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>    <span class="cf">return</span> d, psz, ptype, pcontent</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a><span class="kw">def</span> serialize(ptype, pcontent):</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>    buf <span class="op">=</span> []</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a>    psz <span class="op">=</span> <span class="bu">len</span>(pcontent) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a>    buf.append(psz)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a>    buf.append(ptype)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a>    buf.extend(pcontent)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a>    <span class="cf">return</span> <span class="bu">bytes</span>(buf)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a><span class="kw">def</span> auth_send(s, sid, xchg_num, packet):    <span class="co"># prefix packets with authentication</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a>    msg_id <span class="op">=</span> serialize(<span class="bn">0x01</span>, [xchg_num])</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true"></a>    identifier <span class="op">=</span> serialize(<span class="bn">0x02</span>, sid)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true"></a>    s.sendall(msg_id <span class="op">+</span> identifier <span class="op">+</span> packet)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true"></a>    <span class="cf">return</span> xchg_num <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true"></a><span class="kw">def</span> main():</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true"></a>    s <span class="op">=</span> socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true"></a>    s.<span class="ex">connect</span>((<span class="st">&quot;flu.xxx&quot;</span>, <span class="dv">2005</span>))</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;got xchg_num:&quot;</span>, pcontent[<span class="dv">0</span>])</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true"></a>                xchg_num <span class="op">=</span> pcontent[<span class="dv">0</span>] <span class="co"># gonna be xchg_num + 1</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true"></a>            <span class="cf">elif</span> ptype <span class="op">==</span> <span class="bn">0x02</span>:</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true"></a>                sid <span class="op">=</span> pcontent</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;got session id:&quot;</span>, <span class="bu">bytes</span>(sid))</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true"></a>            <span class="cf">elif</span> ptype <span class="op">==</span> <span class="bn">0x03</span> <span class="kw">and</span> pcontent[<span class="dv">0</span>] <span class="op">==</span> <span class="bn">0x01</span>:</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;&quot;</span>)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;authenticating and requesting new user credentials&quot;</span>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true"></a>                xchg_num <span class="op">=</span> auth_send(s, sid, xchg_num, serialize(<span class="bn">0x03</span>, [<span class="bn">0x02</span>]))</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true"></a>            <span class="cf">elif</span> ptype <span class="op">==</span> <span class="bn">0x03</span> <span class="kw">and</span> pcontent[<span class="dv">0</span>] <span class="op">==</span> <span class="bn">0x03</span>:</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true"></a>                username <span class="op">=</span> <span class="st">&quot;&quot;</span>.join([<span class="bu">chr</span>(x) <span class="cf">for</span> x <span class="kw">in</span> pcontent[<span class="dv">1</span>:]])</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;got username:&quot;</span>, username)</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true"></a>            <span class="cf">elif</span> ptype <span class="op">==</span> <span class="bn">0x03</span> <span class="kw">and</span> pcontent[<span class="dv">0</span>] <span class="op">==</span> <span class="bn">0x04</span>:</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true"></a>                password <span class="op">=</span> <span class="st">&quot;&quot;</span>.join([<span class="bu">chr</span>(x) <span class="cf">for</span> x <span class="kw">in</span> pcontent[<span class="dv">1</span>:]])</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;got password:&quot;</span>, password)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;logging in&quot;</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true"></a>                auth_send(s, sid, xchg_num, serialize(<span class="bn">0x04</span>, [<span class="bn">0x01</span>]))</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true"></a>            <span class="cf">elif</span> ptype <span class="op">==</span> <span class="bn">0x04</span> <span class="kw">and</span> pcontent[<span class="dv">0</span>] <span class="op">==</span> <span class="bn">0x02</span>:</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;logged in successfully&quot;</span>)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;requesting flag...&quot;</span>)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true"></a>                auth_send(s, sid, xchg_num, serialize(<span class="bn">0x05</span>, [<span class="bn">0x01</span>]))</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true"></a>            <span class="cf">elif</span> ptype <span class="op">==</span> <span class="bn">0x05</span>:</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;got the flag, woohoo!!!&quot;</span>)</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true"></a>                flag <span class="op">=</span> <span class="st">&quot;&quot;</span>.join([<span class="bu">chr</span>(x) <span class="cf">for</span> x <span class="kw">in</span> pcontent]) <span class="co"># forgive me</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;and the flag is: '</span><span class="sc">%s</span><span class="st">'&quot;</span> <span class="op">%</span> flag)</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;well done, closing connection.&quot;</span>)</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true"></a>                s.shutdown(socket.SHUT_RDWR)</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true"></a>                s.close()</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true"></a>                <span class="cf">return</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true"></a>            <span class="cf">elif</span> ptype <span class="op">==</span> <span class="bn">0xff</span>:</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;[!] error: </span><span class="sc">%s</span><span class="st">, closing connection&quot;</span> <span class="op">%</span> <span class="bu">hex</span>(pcontent[<span class="dv">0</span>]))</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true"></a>                <span class="cf">return</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true"></a>            <span class="cf">else</span>:</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true"></a>                <span class="bu">print</span>(<span class="st">&quot;[?] unknown packet type, that's a weird one&quot;</span>)</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true"></a>                <span class="cf">return</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true"></a>            <span class="bu">print</span>(<span class="st">&quot;---------------------------&quot;</span>)</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true"></a>    main()</span></code></pre></div>
+<h3 id="flag">Flag</h3>
+<p>​ flag{<strong>vpns_ar3_n0t_h4ck3r_appr0v3d</strong>}</p>
+<h4 id="credits">Credits</h4>
+<ul>
+<li>Writeup by <a href="https://ctftime.org/user/85858">everl0stz</a></li>
+<li>Solved by <a href="https://ctftime.org/user/85858">everl0stz</a></li>
+<li>WaletSec 2020</li>
+</ul>
+<h4 id="license">License</h4>
+<p><strong>CC BY 4.0</strong> WaletSec + everl0stz</p>
+    </section>
+</article>
+
+        </main>
+
+        <footer>
+            <div>Source code available on 
+                <a href="https://github.com/WaletSec/waletsec.github.io">GitHub</a></div>
+            <div>Site proudly generated by
+                <a href="http://jaspervdj.be/hakyll">Hakyll</a></div>
+        </footer>
+    </body>
+</html>

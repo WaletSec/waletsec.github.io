@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>WaletSec - 2021-03-14-Numbers</title>
+        <link rel="stylesheet" href="../css/default.css" />
+        <link rel="stylesheet" href="../css/syntax.css" />
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../">WaletSec</a>
+            </div>
+            <nav>
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>2021-03-14-Numbers</h1>
+            <article>
+    <section class="header">
+        Posted on March 14, 2021
+        
+    </section>
+    <section>
+        <h1 id="numbers">Numbers</h1>
+<h3 id="solution">Solution</h3>
+<p>When we connect to address from task description, we need to guess some numbers. It seems like the numbers are 32-bit. I’ve done <a href="https://waletsec.github.io/posts/2020-11-24-PRNG-Task-NACTF.html">similar challenge before</a> and I assumed that the goal of this challenge is to rebuild Mersenne Twister’s matrix state. I utilized <a href="https://pypi.org/project/randcrack/">RandCrack</a> Python library to do that.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="im">import</span> socket</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="im">from</span> randcrack <span class="im">import</span> RandCrack</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>rc <span class="op">=</span> RandCrack()</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>s <span class="op">=</span> socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="bu">print</span>(<span class="st">&quot;connecting&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>s.<span class="ex">connect</span>((<span class="st">&quot;challs.dvc.tf&quot;</span>, <span class="dv">3096</span>))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="bu">print</span>(<span class="st">&quot;connected&quot;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="bu">print</span>(s.recv(<span class="dv">256</span>))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">624</span>):</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    s.send(b<span class="st">'1</span><span class="ch">\n</span><span class="st">'</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>    n <span class="op">=</span> <span class="bu">int</span>(s.recv(<span class="dv">4096</span>).decode().replace(<span class="st">&quot;Nice try! I was thinking of &quot;</span>, <span class="st">&quot;&quot;</span>).split(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)[<span class="dv">0</span>])</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>    <span class="bu">print</span>(n)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>    rc.submit(n)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>guessed_number <span class="op">=</span> rc.predict_getrandbits(<span class="dv">32</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a><span class="bu">print</span>(guessed_number)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a>s.send((<span class="st">&quot;</span><span class="sc">%i</span><span class="ch">\n</span><span class="st">&quot;</span> <span class="op">%</span> guessed_number).encode(<span class="st">&quot;ASCII&quot;</span>))</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a><span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a>    <span class="bu">print</span>(s.recv(<span class="dv">4096</span>))</span></code></pre></div>
+<h3 id="flag">Flag</h3>
+<p><code>dvCTF{tw1st3d_numb3rs}</code></p>
+<h4 id="credits">Credits</h4>
+<ul>
+<li>Writeup by <a href="https://ctftime.org/user/85858">everl0stz</a></li>
+<li>Solved by <a href="https://ctftime.org/user/85858">everl0stz</a></li>
+<li>WaletSec 2021</li>
+</ul>
+<h4 id="license">License</h4>
+<p><strong>CC BY 4.0</strong> WaletSec + everl0stz</p>
+    </section>
+</article>
+
+        </main>
+
+        <footer>
+            <div>Source code available on 
+                <a href="https://github.com/WaletSec/waletsec.github.io">GitHub</a></div>
+            <div>Site proudly generated by
+                <a href="http://jaspervdj.be/hakyll">Hakyll</a></div>
+        </footer>
+    </body>
+</html>
