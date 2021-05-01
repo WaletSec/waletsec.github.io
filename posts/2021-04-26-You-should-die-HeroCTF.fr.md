@@ -47,7 +47,7 @@ Flag : Hero{r3d1r3c710n_c4n_b3_d4n63r0u5_57395379}
 #### Credits
 
 - Writeup by [mble](https://ctftime.org/user/93848)
-- Solved by [mble](https://ctftime.org/user/93848)
+- Solved by [everl0stz](https://ctftime.org/user/85858); [mble](https://ctftime.org/user/93848)
 - WaletSec 2021
 
 #### License
