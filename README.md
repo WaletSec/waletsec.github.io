@@ -1,4 +1,5 @@
-# WaletSec's website with writeups of CTF challenges.
+# waletsec.github.io
+WaletSec's website with writeups of CTF challenges.
 
 ## Website's code license:
 GPL v3.0
